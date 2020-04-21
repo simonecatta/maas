@@ -25,8 +25,8 @@ pipeline {
                         sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
                         sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
                         //sh "cd k8s-deploy-staging/ && sed 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' ${env.APP_NAME}.yml > manifest-gen/${env.APP_NAME}.yml"
-                        sh "cd maas-hot/ && sed -i 's#image: .*#image: ${env.TAG_STAGING}#' manifest-gen/${env.APP_NAME}.yml"
-                        sh "cd maas-hot/ && git add manifest-gen/${env.APP_NAME}.yml && git commit -m 'Update ${env.APP_NAME} version ${env.VERSION}'"
+                        sh "cd maas-hot/ && sed -i 's#image: .*#image: ${env.TAG_STAGING}#' manifests/gen/${env.APP_NAME}.yml"
+                        sh "cd maas-hot/ && git add manifests/gen/${env.APP_NAME}.yml && git commit -m 'Update ${env.APP_NAME} version ${env.VERSION}'"
                         sh "cd maas-hot/ && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/k8s-deploy-staging"
                         sh "rm -rf maas-hot"
                     }
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 checkout scm
                 container('kubectl') {
-                sh "kubectl -n staging apply -f manifest-gen/${env.APP_NAME}.yml"
+                    sh "kubectl -n staging apply -f manifests/gen/${env.APP_NAME}.yml"
                 }
             }
         }
