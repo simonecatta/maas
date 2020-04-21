@@ -27,7 +27,7 @@ pipeline {
                         //sh "cd k8s-deploy-staging/ && sed 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' ${env.APP_NAME}.yml > manifest-gen/${env.APP_NAME}.yml"
                         sh "cd maas-hot/ && sed -i 's#image: .*#image: ${env.TAG_STAGING}#' manifests/gen/${env.APP_NAME}.yml"
                         sh "cd maas-hot/ && git add manifests/gen/${env.APP_NAME}.yml && git commit -m 'Update ${env.APP_NAME} version ${env.VERSION}'"
-                        sh "cd maas-hot/ && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/k8s-deploy-staging"
+                        sh "cd maas-hot/ && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
                         sh "rm -rf maas-hot"
                     }
                 }
