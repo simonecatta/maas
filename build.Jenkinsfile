@@ -18,18 +18,18 @@ pipeline {
                 }
             }
         } 
-    }
-    stage('Docker build') {
-        steps {
-            container('docker') {
-                sh "docker build -t ${env.TAG_DEV} ."
+        stage('Docker build') {
+            steps {
+                container('docker') {
+                    sh "docker build -t ${env.TAG_DEV} ."
+                }
             }
         }
-    }
-    stage('Docker push to registry') {
-        steps {
-            container('docker') {
-            sh "docker push ${env.TAG_DEV}"
+        stage('Docker push to registry') {
+            steps {
+                container('docker') {
+                sh "docker push ${env.TAG_DEV}"
+                }
             }
         }
     }
