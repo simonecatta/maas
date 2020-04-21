@@ -32,5 +32,22 @@ pipeline {
                 }
             }
         }
+
+        stage ('Docker Build') {
+            steps {
+                // prepare docker build context
+                //sh "cp target/project.war ./tmp-docker-build-context"
+
+                // Build and push image with Jenkins' docker-plugin
+                script {
+                    withDockerRegistry([url: "http://${env.DOCKER_REGISTRY_URL}:5000"]) {
+                        // we give the image the same version as the .war package
+                        def image = docker.build("${env.TAG_DEV}:5000", "--build-arg .")
+                        image.push()
+                    }
+                }
+                
+            }
+        }
     }
 }
