@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage('Run production ready e2e check in staging') {
             steps {
+                checkout scm
                 container('jmeter') {
                     script {
                     def status = executeJMeter ( 
