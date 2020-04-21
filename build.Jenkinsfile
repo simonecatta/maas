@@ -6,7 +6,7 @@ pipeline {
         APP_NAME = "simplenodeservice"
         ARTEFACT_ID = "ace/" + "${env.APP_NAME}"
         VERSION = "1.0"
-        TAG = "${env.DOCKER_REGISTRY_URL}:5000/library/${env.ARTEFACT_ID}"
+        TAG = "http://${env.DOCKER_REGISTRY_URL}:5000/library/${env.ARTEFACT_ID}"
         TAG_DEV = "${env.TAG}-${env.VERSION}-${env.BUILD_NUMBER}"
     }
     stages {
