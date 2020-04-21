@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'nodejs'
+        label 'kubegit'
     }
     environment {
         APP_NAME = "simplenodeservice"
