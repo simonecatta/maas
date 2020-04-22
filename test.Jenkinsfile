@@ -60,7 +60,7 @@ pipeline {
         stage('Promote to production') {
             when {
                 expression {
-                    return env.DPROD == 'YES'
+                    return env.DPROD == true
                 }
             }
             steps {
