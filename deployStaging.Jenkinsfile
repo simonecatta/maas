@@ -4,7 +4,6 @@ pipeline {
         string(name: 'TAG_STAGING', defaultValue: 'localhost:32000/library/ace/simplenodeservice-1.0-13', description: 'The image of the service to deploy.', trim: true)
         string(name: 'VERSION', defaultValue: '1.0', description: 'The version of the service to deploy.', trim: true)
         string(name: 'DT_CUSTOM_PROP', defaultValue: '', description: 'Custom properties to be supplied to Dynatrace.', trim: true)
-        choice(name: 'QUALITYGATE_PROVIDER', choices: ['Performance Signature Plugin','Keptn Quality Gates', 'None'], description: 'Select your evaluation provider. \'None\' will not evaluate')
     }
     agent {
         label 'kubegit'

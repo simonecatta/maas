@@ -8,26 +8,26 @@ pipeline {
         label 'kubegit'
     }
     stages {
-        stage('Run production ready e2e check in staging') {
+        stage('Run performance test') {
             steps {
                 checkout scm
                 container('jmeter') {
                     script {
                     def status = executeJMeter ( 
                         scriptName: "jmeter/simplenodeservice_load.jmx",
-                        resultsDir: "e2eCheck_${env.APP_NAME}_staging_${BUILD_NUMBER}",
+                        resultsDir: "perfCheck_${env.APP_NAME}_staging_${BUILD_NUMBER}",
                         serverUrl: "simplenode.staging", 
                         serverPort: 80,
                         checkPath: '/health',
                         vuCount: 1,
                         loopCount: 10,
-                        LTN: "e2eCheck_${BUILD_NUMBER}",
+                        LTN: "perfCheck_${env.APP_NAME}_${BUILD_NUMBER}",
                         funcValidation: false,
                         avgRtValidation: 4000
                     )
                     if (status != 0) {
                         currentBuild.result = 'FAILED'
-                        error "Production ready e2e check in staging failed."
+                        error "Performance test in staging failed."
                     }
                     }
                 }
@@ -60,7 +60,7 @@ pipeline {
         stage('Promote to production') {
             when {
                 expression {
-                    return env.APPROVE_PROD == 'YES'
+                    return env.DPROD == 'YES'
                 }
             }
             steps {
