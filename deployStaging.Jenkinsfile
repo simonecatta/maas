@@ -13,14 +13,13 @@ pipeline {
                 script {
                     env.DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
                     env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateMetaData()
-                    echo env.DT_CUSTOM_PROP
                 }
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
                         sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
-                        sh "cd maas-hot/ && sed -i 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' manifests/staging/${env.APP_NAME}.yml"
-                        sh "cd maas-hot/ && sed -i 's#image: .*#image: ${env.TAG_STAGING}#' manifests/staging/${env.APP_NAME}.yml"
+                        sh "cd maas-hot/ && sed 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' manifests/${env.APP_NAME}.yml > manifests/staging/${env.APP_NAME}.yml"
+                        sh "cd maas-hot/ && sed 's#image: .*#image: ${env.TAG_STAGING}#' manifests/${env.APP_NAME}.yml > manifests/staging/${env.APP_NAME}.yml"
                         sh "cd maas-hot/ && git add manifests/staging/${env.APP_NAME}.yml && git commit -m 'Update ${env.APP_NAME} version ${env.VERSION}'"
                         sh "cd maas-hot/ && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
                         sh "rm -rf maas-hot"
