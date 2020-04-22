@@ -62,7 +62,7 @@ pipeline {
             agent none
             when {
                 expression {
-                    return env.DPROD
+                    return env.DPROD == 'true'
                 }
             }
             steps {
