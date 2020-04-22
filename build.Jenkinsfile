@@ -5,8 +5,8 @@ pipeline {
     environment {
         APP_NAME = "simplenodeservice"
         ARTEFACT_ID = "ace/" + "${env.APP_NAME}"
-        VERSION = "1.0"
-        TAG = "${env.DOCKER_REGISTRY_URL}/library/${env.ARTEFACT_ID}"
+        VERSION = readFile('version').trim()
+        TAG = "${env.DOCKER_REGISTRY_URL}/library/${env.ARTEFACT_ID}:${env.VERSION}"
         TAG_DEV = "${env.TAG}-${env.VERSION}-${env.BUILD_NUMBER}"
     }
     stages {
@@ -21,33 +21,34 @@ pipeline {
         stage('Docker build') {
             steps {
                 container('docker') {
-                    sh "docker build -t ${env.TAG_DEV} ."
+                    sh "docker build -t ${env.TAG} ."
                 }
             }
         }
         stage('Docker push to registry') {
             steps {
                 container('docker') {
-                sh "docker push ${env.TAG_DEV}"
+                    sh "docker push ${env.TAG}"
                 }
             }
         }
-
-        stage ('Docker Build') {
+        /*stage('Mark artifact for staging namespace') {
             steps {
-                // prepare docker build context
-                //sh "cp target/project.war ./tmp-docker-build-context"
-
-                // Build and push image with Jenkins' docker-plugin
-                script {
-                    withDockerRegistry([url: "http://${env.DOCKER_REGISTRY_URL}:5000"]) {
-                        // we give the image the same version as the .war package
-                        def image = docker.build("${env.TAG_DEV}:5000", "--build-arg .")
-                        image.push()
-                    }
+                container('docker'){
+                sh "docker tag ${env.TAG_DEV} ${env.TAG_STAGING}"
+                sh "docker push ${env.TAG_STAGING}"
                 }
-                
             }
-        }
+        }*/
+        stage('Deploy to staging') {
+            steps {
+                build job: "2. Deploy",
+                parameters: [
+                    string(name: 'APP_NAME', value: "${env.APP_NAME}"),
+                    string(name: 'TAG_STAGING', value: "${env.TAG}"),
+                    string(name: 'VERSION', value: "${env.VERSION}")
+                ]
+            }
+        }  
     }
 }
