@@ -58,9 +58,11 @@ pipeline {
         }
 
         stage('Promote to production') {
+            // no agent, so executors are not used up when waiting for other job to complete
+            agent none
             when {
                 expression {
-                    return env.DPROD == true
+                    return env.DPROD
                 }
             }
             steps {
