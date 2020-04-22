@@ -17,9 +17,10 @@ pipeline {
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
+                        sh "echo ${env.DT_CUSTOM_PROP}"
                         sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
                         sh "cd maas-hot/ && sed 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' manifests/${env.APP_NAME}.yml > manifests/staging/${env.APP_NAME}.yml"
-                        sh "cd maas-hot/ && sed 's#image: .*#image: ${env.TAG_STAGING}#' manifests/${env.APP_NAME}.yml > manifests/staging/${env.APP_NAME}.yml"
+                        sh "cd maas-hot/ && sed -i 's#image: .*#image: ${env.TAG_STAGING}#' manifests/staging/${env.APP_NAME}.yml"
                         sh "cd maas-hot/ && git add manifests/staging/${env.APP_NAME}.yml && git commit -m 'Update ${env.APP_NAME} version ${env.VERSION}'"
                         sh "cd maas-hot/ && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${env.GITHUB_ORGANIZATION}/maas-hot"
                         sh "rm -rf maas-hot"
@@ -51,5 +52,6 @@ def generateMetaData(){
     returnValue += "SCM=${env.GIT_URL} "
     returnValue += "Branch=${env.GIT_BRANCH} "
     returnValue += "Build=${env.BUILD} "
+    returnValue += "Image=${env.TAG-STAGING} "
     return returnValue;
 }
