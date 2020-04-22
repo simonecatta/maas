@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simplenodeservice
+  namespace: staging
   labels:
     app: simplenodeservice
 spec:
@@ -18,14 +19,14 @@ spec:
     spec:
       containers:
       - name: simplenodeservice
-        image: localhost:32000/library/ace/simplenodeservice:1.0.0-27
+        image: localhost:32000/library/ace/simplenodeservice:3.0.0-28
         env:
         - name: JAVA_OPTS
           value: -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
         - name: DT_TAGS
           value: "product=sockshop"
         - name: DT_CUSTOM_PROP
-          value: "Owner=ace@dynatrace.com FriendlyName=simplenode SERVICE_TYPE=FRONTEND Project=simpleproject DesignDocument=https://simple-corp.com/stories/simplenodeservice Class=Gold SCM=https://github.com/dynatrace-ace/maas-hot Branch=origin/master Build=null "
+          value: "DT_CUSTOM_PROP_PLACEHOLDER"
         resources:
           limits:
             cpu: 500m
@@ -65,6 +66,7 @@ metadata:
   name: simplenodeservice
   labels:
     app: simplenodeservice
+  namespace: staging
 spec:
   ports:
   - name: http
