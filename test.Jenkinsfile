@@ -19,8 +19,8 @@ pipeline {
                         serverUrl: "simplenode.staging", 
                         serverPort: 80,
                         checkPath: '/health',
-                        vuCount: 10,
-                        loopCount: 1000,
+                        vuCount: 1,
+                        loopCount: 10,
                         LTN: "e2eCheck_${BUILD_NUMBER}",
                         funcValidation: false,
                         avgRtValidation: 4000

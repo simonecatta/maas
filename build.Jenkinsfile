@@ -2,34 +2,33 @@ pipeline {
     parameters {
         choice(name: 'BUILD', choices: ['1','2','3','4'], description: 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
     }
-    agent {
-        label 'nodejs'
-    }
     environment {
         APP_NAME = "simplenodeservice"
         ARTEFACT_ID = "ace/" + "${env.APP_NAME}"
         TAG = "${env.DOCKER_REGISTRY_URL}/library/${env.ARTEFACT_ID}:${env.BUILD}.0.0-${env.BUILD_NUMBER}"
     }
     stages {
-        stage('Node build') {
-            steps {
-                checkout scm
-                container('nodejs') {
-                sh 'npm install'
+        node ('nodejs') {
+            stage('Node build') {
+                steps {
+                    checkout scm
+                    container('nodejs') {
+                    sh 'npm install'
+                    }
+                }
+            } 
+            stage('Docker build') {
+                steps {
+                    container('docker') {
+                        sh "docker build --build-arg BUILD_NUMBER=${env.BUILD} -t ${env.TAG} ."
+                    }
                 }
             }
-        } 
-        stage('Docker build') {
-            steps {
-                container('docker') {
-                    sh "docker build --build-arg BUILD_NUMBER=${env.BUILD} -t ${env.TAG} ."
-                }
-            }
-        }
-        stage('Docker push to registry') {
-            steps {
-                container('docker') {
-                    sh "docker push ${env.TAG}"
+            stage('Docker push to registry') {
+                steps {
+                    container('docker') {
+                        sh "docker push ${env.TAG}"
+                    }
                 }
             }
         }
