@@ -66,7 +66,6 @@ pipeline {
                 }
             }
             steps {
-                sh 'printenv'
                 build job: "4. Deploy production",
                 parameters: [
                     string(name: 'APP_NAME', value: "${env.APP_NAME}")
