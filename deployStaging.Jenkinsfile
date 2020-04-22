@@ -3,7 +3,6 @@ pipeline {
         string(name: 'APP_NAME', defaultValue: 'simplenodeservice', description: 'The name of the service to deploy.', trim: true)
         string(name: 'TAG_STAGING', defaultValue: '', description: 'The image of the service to deploy.', trim: true)
         string(name: 'VERSION', defaultValue: '', description: 'The version of the service to deploy.', trim: true)
-        string(name: 'DT_CUSTOM_PROP', defaultValue: '', description: 'Custom properties to be supplied to Dynatrace.', trim: true)
     }
     agent {
         label 'kubegit'
@@ -11,7 +10,9 @@ pipeline {
     stages {
         stage('Update Deployment and Service specification') {
             steps {
-                DT_CUSTOM_PROP = readFile("manifests/staging/dt_meta.txt") + " " + generateMetaData()
+                DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
+                DT_CUSTOM_PROP = DT_CUSTOM_PROP " " + generateMetaData()
+                echo DT_CUSTOM_PROP
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
