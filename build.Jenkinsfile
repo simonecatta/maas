@@ -7,6 +7,9 @@ pipeline {
         ARTEFACT_ID = "ace/" + "${env.APP_NAME}"
         TAG = "${env.DOCKER_REGISTRY_URL}/library/${env.ARTEFACT_ID}:${env.BUILD}.0.0-${env.BUILD_NUMBER}"
     }
+    agent {
+        label 'nodejs'
+    }
     stages {
         node ('nodejs') {
             stage('Node build') {
@@ -32,15 +35,17 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to staging') {
-            steps {
-                build job: "2. Deploy",
-                parameters: [
-                    string(name: 'APP_NAME', value: "${env.APP_NAME}"),
-                    string(name: 'TAG_STAGING', value: "${env.TAG}"),
-                    string(name: 'VERSION', value: "${env.VERSION}")
-                ]
-            }
-        }  
+        node ('master') {
+            stage('Deploy to staging') {
+                steps {
+                    build job: "2. Deploy",
+                    parameters: [
+                        string(name: 'APP_NAME', value: "${env.APP_NAME}"),
+                        string(name: 'TAG_STAGING', value: "${env.TAG}"),
+                        string(name: 'VERSION', value: "${env.VERSION}")
+                    ]
+                }
+            }  
+        }
     }
 }
