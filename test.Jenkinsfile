@@ -16,7 +16,7 @@ pipeline {
                     def status = executeJMeter ( 
                         scriptName: "jmeter/simplenodeservice_load.jmx",
                         resultsDir: "perfCheck_${env.APP_NAME}_staging_${BUILD_NUMBER}",
-                        serverUrl: "simplenode.staging", 
+                        serverUrl: "simplenodeservice.staging", 
                         serverPort: 80,
                         checkPath: '/health',
                         vuCount: 1,
