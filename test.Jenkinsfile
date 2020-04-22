@@ -1,11 +1,11 @@
 @Library('ace@master') _ 
 
 pipeline {
+    parameters {
+        string(name: 'APP_NAME', defaultValue: 'simplenodeservice', description: 'The name of the service to deploy.', trim: true)
+    }
     agent {
         label 'kubegit'
-    }
-    environment {
-        APP_NAME = "simplenodeservice"
     }
     stages {
         stage('Run production ready e2e check in staging') {
@@ -33,5 +33,42 @@ pipeline {
                 }
             }
         }
+
+        stage('Manual approval') {
+            // no agent, so executors are not used up when waiting for approvals
+            agent none
+            steps {
+                script {
+                    try {
+                        timeout(time:10, unit:'MINUTES') {
+                            env.APPROVE_PROD = input message: 'Promote to Production', ok: 'Continue',
+                                parameters: [choice(name: 'APPROVE_PROD', choices: 'YES\nNO', description: 'Deploy from STAGING to PRODUCTION?')]
+                            if (env.APPROVE_PROD == 'YES'){
+                                env.DPROD = true
+                            } else {
+                                env.DPROD = false
+                            }
+                        }
+                    } catch (error) {
+                        env.DPROD = true
+                        echo 'Timeout has been reached! Deploy to PRODUCTION automatically activated'
+                    }
+                }
+            }
+        }
+
+        stage('Promote to production') {
+            when {
+                expression {
+                    return env.APPROVE_PROD == 'YES'
+                }
+            }
+            steps {
+                build job: "4. Deploy production",
+                parameters: [
+                    string(name: 'APP_NAME', value: "${env.APP_NAME}")
+                ]
+            }
+        }  
     }
 }
