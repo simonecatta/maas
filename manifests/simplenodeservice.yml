@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simplenode
+  name: simplenodeservice
   namespace: staging
   labels:
-    app: simplenode
+    app: simplenodeservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: simplenode
+      app: simplenodeservice
   template:
     metadata:
       labels:
-        app: simplenode
+        app: simplenodeservice
         version: v1
     spec:
       containers:
-      - name: simplenode
+      - name: simplenodeservice
         image: grabnerandi/simplenodeservice:1.0.0
         env:
         - name: JAVA_OPTS
@@ -63,9 +63,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: simplenode
+  name: simplenodeservice
   labels:
-    app: simplenode
+    app: simplenodeservice
   namespace: staging
 spec:
   ports:
@@ -74,5 +74,5 @@ spec:
     targetPort: 8080
     nodePort: 31500
   selector:
-    app: simplenode
+    app: simplenodeservice
   type: NodePort
