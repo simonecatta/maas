@@ -18,14 +18,14 @@ spec:
     spec:
       containers:
       - name: simplenodeservice
-        image: localhost:32000/library/ace/simplenodeservice:3.0.0-24
+        image: localhost:32000/library/ace/simplenodeservice:1.0.0-27
         env:
         - name: JAVA_OPTS
           value: -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
         - name: DT_TAGS
           value: "product=sockshop"
         - name: DT_CUSTOM_PROP
-          value: "DT_CUSTOM_PROP_PLACEHOLDER"
+          value: "Owner=ace@dynatrace.com FriendlyName=simplenode SERVICE_TYPE=FRONTEND Project=simpleproject DesignDocument=https://simple-corp.com/stories/simplenodeservice Class=Gold SCM=https://github.com/dynatrace-ace/maas-hot Branch=origin/master Build=null "
         resources:
           limits:
             cpu: 500m
