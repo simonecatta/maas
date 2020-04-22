@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: simplenode
-        image: localhost:32000/library/ace/simplenodeservice-1.0-13
+        image: localhost:32000/library/ace/simplenodeservice:1.0.0
         env:
         - name: JAVA_OPTS
           value: -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
