@@ -11,9 +11,9 @@ pipeline {
         stage('Update Deployment and Service specification') {
             steps {
                 script {
-                    DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
-                    DT_CUSTOM_PROP = DT_CUSTOM_PROP " " + generateMetaData()
-                    echo DT_CUSTOM_PROP
+                    env.DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
+                    env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateMetaData()
+                    echo env.DT_CUSTOM_PROP
                 }
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
