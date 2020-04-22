@@ -10,9 +10,11 @@ pipeline {
     stages {
         stage('Update Deployment and Service specification') {
             steps {
-                DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
-                DT_CUSTOM_PROP = DT_CUSTOM_PROP " " + generateMetaData()
-                echo DT_CUSTOM_PROP
+                script {
+                    DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta.txt" 
+                    DT_CUSTOM_PROP = DT_CUSTOM_PROP " " + generateMetaData()
+                    echo DT_CUSTOM_PROP
+                }
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
