@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     env.DT_CUSTOM_PROP = readFile "manifests/staging/dt_meta" 
-                    env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateMetaData()
+                    env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateDynamicMetaData()
                 }
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
@@ -47,11 +47,11 @@ pipeline {
     }
 }
 
-def generateMetaData(){
+def generateDynamicMetaData(){
     String returnValue = "";
     returnValue += "SCM=${env.GIT_URL} "
     returnValue += "Branch=${env.GIT_BRANCH} "
-    //returnValue += "Build=${env.BUILD} "
+    returnValue += "Build=${env.BUILD} "
     returnValue += "Image=${env.TAG_STAGING} "
     return returnValue;
 }
