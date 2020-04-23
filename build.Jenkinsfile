@@ -5,10 +5,10 @@ pipeline {
     environment {
         APP_NAME = "simplenodeservice"
         ARTEFACT_ID = "ace/" + "${env.APP_NAME}"
-        TAG = "${env.DOCKER_REGISTRY_URL}/library/${env.ARTEFACT_ID}:${env.BUILD}.0.0-${env.BUILD_NUMBER}"
+        TAG = "${env.DOCKER_REGISTRY_URL}/${env.ARTEFACT_ID}:${env.BUILD}.0.0-${env.BUILD_NUMBER}"
     }
     agent {
-        label 'nodejs'
+        label 'ace-exec'
     }
     stages {
        
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 checkout scm
                 container('nodejs') {
-                sh 'npm install'
+                    sh 'npm install'
                 }
             }
         } 
