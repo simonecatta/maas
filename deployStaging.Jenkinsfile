@@ -51,7 +51,7 @@ def generateMetaData(){
     String returnValue = "";
     returnValue += "SCM=${env.GIT_URL} "
     returnValue += "Branch=${env.GIT_BRANCH} "
-    returnValue += "Build=${env.BUILD} "
+    //returnValue += "Build=${env.BUILD} "
     returnValue += "Image=${env.TAG_STAGING} "
     return returnValue;
 }
