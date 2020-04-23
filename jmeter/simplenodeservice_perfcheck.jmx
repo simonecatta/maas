@@ -17,8 +17,8 @@
             <stringProp name="Argument.value">250</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="DT_LTN" elementType="Argument">
-            <stringProp name="Argument.name">DT_LTN</stringProp>
+          <elementProp name="LTN" elementType="Argument">
+            <stringProp name="Argument.name">LTN</stringProp>
             <stringProp name="Argument.value">Default</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -88,10 +88,10 @@ import java.util;
 // -------------------------------------------------------------------------------------
 // Generate the x-dynatrace-test header 
 // -------------------------------------------------------------------------------------
-String LTN=JMeterUtils.getProperty(&quot;DT_LTN&quot;);
+String LTN=JMeterUtils.getProperty(&quot;LTN&quot;);
 if((LTN == null) || (LTN.length() == 0)) {
     if(vars != null) {
-        LTN = vars.get(&quot;DT_LTN&quot;);
+        LTN = vars.get(&quot;LTN&quot;);
     }
 }
 if(LTN == null) LTN = &quot;NoTestName&quot;;
