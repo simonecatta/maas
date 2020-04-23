@@ -3,7 +3,7 @@ pipeline {
         string(name: 'APP_NAME', defaultValue: 'simplenodeservice', description: 'The name of the service to deploy.', trim: true)
     }
     agent {
-        label 'ace-exec'
+        label 'kubegit'
     }
     stages {
         stage('Update production versions with latest versions from staging') {

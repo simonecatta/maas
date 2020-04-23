@@ -8,7 +8,7 @@ pipeline {
         TAG = "${env.DOCKER_REGISTRY_URL}/${env.ARTEFACT_ID}:${env.BUILD}.0.0-${env.BUILD_NUMBER}"
     }
     agent {
-        label 'ace-exec'
+        label 'nodejs'
     }
     stages {
        

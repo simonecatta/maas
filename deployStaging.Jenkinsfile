@@ -5,7 +5,7 @@ pipeline {
         string(name: 'BUILD', defaultValue: '', description: 'The version of the service to deploy.', trim: true)
     }
     agent {
-        label 'ace-exec'
+        label 'kubegit'
     }
     stages {
         stage('Update Deployment and Service specification') {
