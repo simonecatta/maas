@@ -9,7 +9,7 @@ pipeline {
         stage('Update production versions with latest versions from staging') {
             steps {
                 script {
-                    env.DT_CUSTOM_PROP = readFile "manifests/production/dt_meta.txt" 
+                    env.DT_CUSTOM_PROP = readFile "manifests/production/dt_meta" 
                     env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateMetaData()
                 }
                 container('kubectl') {
