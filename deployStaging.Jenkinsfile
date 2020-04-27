@@ -39,7 +39,7 @@ pipeline {
         stage('DT send deploy event') {
             steps {
                 container("curl") {
-                    tagMatchRules = readFile "manifests/staging/dt_tagMatching"
+                    def tagMatchRules = readFile "manifests/staging/dt_tagMatching"
                     script {
                         def status = pushDynatraceDeploymentEvent (
                         tagRule : tagMatchRules,
