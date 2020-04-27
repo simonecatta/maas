@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simplenodeservice
-  namespace: staging
   labels:
     app: simplenodeservice
 spec:
@@ -66,7 +65,6 @@ metadata:
   name: simplenodeservice
   labels:
     app: simplenodeservice
-  namespace: staging
 spec:
   ports:
   - name: http
