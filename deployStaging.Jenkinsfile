@@ -80,7 +80,7 @@ pipeline {
                         testName : "simpleproject.staging.${env.APP_NAME}",
                         url : "http://${SERVICE_IP}:31500",
                         method : "GET",
-                        location : "${env.DT_SYNTHETIC_LOCATION_ID}"
+                        location : "SYNTHETIC_LOCATION-B5CB9ED5874957EA"
                         )
                     }
                 }
