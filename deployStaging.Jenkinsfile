@@ -77,7 +77,7 @@ pipeline {
                 container("curl") {
                     script {
                         def status = dt_createUpdateSyntheticTest (
-                        testName : "sockshop.dev.${env.APP_NAME}",
+                        testName : "simpleproject.staging.${env.APP_NAME}",
                         url : "http://${SERVICE_IP}:31500",
                         method : "GET",
                         location : "${env.DT_SYNTHETIC_LOCATION_ID}"
