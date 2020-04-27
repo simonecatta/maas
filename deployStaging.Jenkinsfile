@@ -36,6 +36,22 @@ pipeline {
                 }
             }
         }
+        stage('DT send deploy event') {
+            steps {
+                container("curl") {
+                    tagMatchRules = readFile "manifests/staging/dt_tagMatching"
+                    script {
+                        def status = pushDynatraceDeploymentEvent (
+                        tagRule : tagMatchRules,
+                        customProperties : [
+                            [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
+                            [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                        ]
+                        )
+                    }
+                }
+            }
+        }
         stage('Run tests') {
             steps {
                 build job: "3. Test",
