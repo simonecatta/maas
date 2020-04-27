@@ -13,6 +13,8 @@ pipeline {
                     env.DT_CUSTOM_PROP = env.DT_CUSTOM_PROP + " " + generateMetaData()
                 }
                 container('kubectl') {
+                    sh "ls -l"
+                    sh "pwd"
                     sh "cd maas-hot && sed 's#value: \"DT_CUSTOM_PROP_PLACEHOLDER\".*#value: \"${env.DT_CUSTOM_PROP}\"#' manifests/${env.APP_NAME}.yml > manifests/production/${env.APP_NAME}.yml"
                     sh "cd maas-hot && sed -i \"s#image: .*#image: `kubectl -n staging get deployment -o jsonpath='{.items[*].spec.template.spec.containers[0].image}' --field-selector=metadata.name=${env.APP_NAME}`#\" manifests/production/${env.APP_NAME}.yml"
                     sh "cat manifests/production/${env.APP_NAME}.yml"
