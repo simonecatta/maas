@@ -66,6 +66,27 @@ pipeline {
                 }
             }
         }
+        stage('DT create synthetic monitor') {
+            steps {
+                container("kubectl") {
+                    script {
+                        // Get IP of service
+                        env.SERVICE_IP = sh(script: 'kubectl get svc simplenodeservice -n staging -o \'jsonpath={..spec.clusterIP}\'', , returnStdout: true).trim()
+                    }
+                }
+                container("curl") {
+                    script {
+                        def status = dt_createUpdateSyntheticTest (
+                        testName : "sockshop.dev.${env.APP_NAME}",
+                        url : "http://${SERVICE_IP}:31500",
+                        method : "GET",
+                        location : "${env.DT_SYNTHETIC_LOCATION_ID}"
+                        )
+                    }
+                }
+            }
+        }
+
         stage('Run tests') {
             steps {
                 build job: "3. Test",
