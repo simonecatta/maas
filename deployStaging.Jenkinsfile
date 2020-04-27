@@ -42,8 +42,7 @@ pipeline {
             steps {
                 container("curl") {
                     script {
-                        def file = readFile "manifests/staging/dt_tagMatching"
-                        def tagMatchRules = readJSON file
+                        def tagMatchRules = readJSON file: "manifests/staging/dt_tagMatching"
                         def status = pushDynatraceDeploymentEvent (
                         tagRule : tagMatchRules,
                         customProperties : [
