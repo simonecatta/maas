@@ -1,5 +1,17 @@
 @Library('ace@master') _ 
 
+def tagMatchRules = [
+  [
+    "meTypes": [
+      ["meType": "SERVICE"]
+    ],
+    tags : [
+      ["context": "CONTEXTLESS", "key": "app", "value": "simplenodeservice"],
+      ["context": "CONTEXTLESS", "key": "environment", "value": "staging"]
+    ]
+  ]
+]
+
 pipeline {
     parameters {
         string(name: 'APP_NAME', defaultValue: 'simplenodeservice', description: 'The name of the service to deploy.', trim: true)
@@ -42,7 +54,6 @@ pipeline {
             steps {
                 container("curl") {
                     script {
-                        def tagMatchRules = readJSON file: "manifests/staging/dt_tagMatching"
                         def status = pushDynatraceDeploymentEvent (
                         tagRule : tagMatchRules,
                         customProperties : [
