@@ -1,5 +1,3 @@
-@Library('ace@master') _ 
-
 def tagMatchRules = [
   [
     "meTypes": [
@@ -47,42 +45,6 @@ pipeline {
                 checkout scm
                 container('kubectl') {
                     sh "kubectl -n staging apply -f manifests/staging/${env.APP_NAME}.yml"
-                }
-            }
-        }
-        stage('DT send deploy event') {
-            steps {
-                container("curl") {
-                    script {
-                        def status = pushDynatraceDeploymentEvent (
-                        tagRule : tagMatchRules,
-                        deploymentVersion: "${env.BUILD}",
-                        customProperties : [
-                            [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
-                            [key: 'Git commit', value: "${env.GIT_COMMIT}"]
-                        ]
-                        )
-                    }
-                }
-            }
-        }
-        stage('DT create synthetic monitor') {
-            steps {
-                container("kubectl") {
-                    script {
-                        // Get IP of service
-                        env.SERVICE_IP = sh(script: 'kubectl get svc simplenodeservice -n staging -o \'jsonpath={..spec.clusterIP}\'', , returnStdout: true).trim()
-                    }
-                }
-                container("curl") {
-                    script {
-                        def status = dt_createUpdateSyntheticTest (
-                        testName : "simpleproject.staging.${env.APP_NAME}",
-                        url : "http://${SERVICE_IP}:31500",
-                        method : "GET",
-                        location : "SYNTHETIC_LOCATION-B5CB9ED5874957EA"
-                        )
-                    }
                 }
             }
         }
